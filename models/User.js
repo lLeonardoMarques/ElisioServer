@@ -4,21 +4,16 @@ const userSchema = new mongoose.Schema({
   userId: { 
     type: String, 
     required: true, 
-    unique: true,
-    index: true 
+    unique: true 
   },
   name: { 
     type: String, 
-    required: true,
-    trim: true
+    required: true 
   },
   email: { 
     type: String, 
     required: true, 
-    unique: true,
-    lowercase: true,
-    trim: true,
-    index: true
+    unique: true 
   },
   password: { 
     type: String, 
@@ -27,73 +22,36 @@ const userSchema = new mongoose.Schema({
   role: { 
     type: String, 
     enum: ['admin', 'student_direct', 'student_gympass'], 
-    default: 'student_direct',
-    index: true
+    default: 'student_direct' 
   },
   planName: { 
     type: String, 
     default: 'Plano Musculação' 
   },
   matriculaNumber: { 
-    type: String,
-    unique: true,
-    sparse: true,
-    index: true
+    type: String 
   },
   gympassId: { 
-    type: String,
-    unique: true,
-    sparse: true,
-    index: true
+    type: String 
   },
-  status: { 
-    type: String, 
-    enum: ['ativo', 'pendente', 'suspenso', 'inativo'], 
-    default: 'ativo',
-    index: true
-  },
-  profileImage: { 
-    type: String,
-    default: null
-  },
-  phone: {
+  phone: {  // 🔥 NOVO CAMPO ADICIONADO
     type: String,
     default: ''
   },
-  birthDate: {
-    type: Date,
-    default: null
+  joinedDate: { 
+    type: Date, 
+    default: Date.now 
   },
-  lastLogin: {
-    type: Date,
-    default: null
+  status: { 
+    type: String, 
+    enum: ['ativo', 'pendente', 'suspenso'], 
+    default: 'ativo' 
   }
 }, { 
-  timestamps: true,
-  collection: 'users'
+  timestamps: true 
 });
 
-// Middleware para gerar matrícula automaticamente
-userSchema.pre('save', function(next) {
-  if (!this.matriculaNumber && this.role !== 'admin') {
-    const year = new Date().getFullYear();
-    const random = Math.floor(1000 + Math.random() * 9000);
-    this.matriculaNumber = `EF-${year}-${random}`;
-  }
-  
-  if (!this.userId) {
-    this.userId = 'u-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6);
-  }
-  
-  next();
-});
-
-userSchema.set('toJSON', {
-  transform: function(doc, ret) {
-    delete ret.password;
-    delete ret.__v;
-    return ret;
-  }
-});
+// 🔥 ÍNDICE PARA BUSCA POR TELEFONE (opcional)
+userSchema.index({ phone: 1 });
 
 module.exports = mongoose.model('User', userSchema);
