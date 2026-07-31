@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/User');
 const Workout = require('../models/Workout');
 
-// GET /api/admin/users - Listar todos os usuários
+// GET /api/admin/users - Listar todos os usuários (COM PHONE)
 router.get('/users', async (req, res) => {
   try {
     const users = await User.find({}, '-password').sort({ createdAt: -1 });
@@ -20,7 +20,7 @@ router.get('/users', async (req, res) => {
   }
 });
 
-// GET /api/admin/users/:userId - Buscar usuário específico
+// GET /api/admin/users/:userId - Buscar usuário específico (COM PHONE)
 router.get('/users/:userId', async (req, res) => {
   try {
     const user = await User.findOne({ userId: req.params.userId }, '-password');
@@ -39,7 +39,7 @@ router.get('/users/:userId', async (req, res) => {
   }
 });
 
-// PUT /api/admin/users/:userId - Atualizar usuário
+// PUT /api/admin/users/:userId - Atualizar usuário (COM PHONE)
 router.put('/users/:userId', async (req, res) => {
   try {
     const { userId } = req.params;
