@@ -26,8 +26,6 @@ if (!MONGODB_URI) {
 
 console.log('🔄 Conectando ao MongoDB Atlas...');
 mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
   serverSelectionTimeoutMS: 10000,
 })
 .then(() => {
